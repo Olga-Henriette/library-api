@@ -25,7 +25,6 @@ class BorrowController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_name' => 'required|string',
             'book_id' => 'required|exists:books,id',
         ]);
 
@@ -35,22 +34,20 @@ class BorrowController extends Controller
 
         $book = Book::find($request->book_id);
 
-        // Vérifier si le livre est déjà emprunté
         if (!$book->available) {
             return response()->json([
                 'success' => false,
                 'message' => 'Ce livre n\'est pas disponible pour le moment'
-            ], 400);
+            ], 422); 
         }
 
-        // Créer l'emprunt
         $borrow = Borrow::create([
-            'user_name' => $request->user_name,
+            'user_id' => $request->user()->id,
             'book_id' => $request->book_id,
             'borrowed_at' => now(),
+            'returned_at' => null,
         ]);
 
-        // Mettre à jour le statut du livre
         $book->update(['available' => false]);
 
         return response()->json([
@@ -78,6 +75,7 @@ class BorrowController extends Controller
 
         return response()->json([
             'success' => true,
+            'data' => $borrow,
             'message' => 'Livre rendu avec succès et remis en inventaire'
         ], 200);
     }

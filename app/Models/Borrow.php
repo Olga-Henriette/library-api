@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Borrow extends Model
 {
-    protected $fillable = ['user_name', 'book_id', 'borrowed_at', 'returned_at'];
+    protected $fillable = ['user_id', 'book_id', 'borrowed_at', 'returned_at'];
 
     public function book(): BelongsTo
     {

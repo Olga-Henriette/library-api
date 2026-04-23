@@ -34,7 +34,7 @@ class AuthorController extends Controller
         }
 
         $author = Author::create($request->all());
-        return response()->json(['success' => true, 'data' => $author, 'message' => 'Auteur créé'], 211);
+        return response()->json(['success' => true, 'data' => $author, 'message' => 'Auteur créé'], 201);
     }
 
     // GET /api/v1/authors/{id} (Détails + ses livres)
